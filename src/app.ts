@@ -91,32 +91,30 @@ app.get(
   (req: Request, res: Response) => {
     const user: any = req.user;
     const token = jwt.sign({ userId: user.id, email: user.email }, SECRET_KEY, { expiresIn: "1h" });
-    res.redirect(`http://localhost:5173/profile?token=${token}`);
+    res.redirect(`https://auth-app-bbbya0excgh6g6a9.polandcentral-01.azurewebsites.net/profile?token=${token}`);
   }
 );
+
 
 //** Callback dla facebooka
 app.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", { failureRedirect: "/" }),
   (req: Request, res: Response, next) => {
-    console.log("Facebook callback reached");
     if (!req.user) {
-      console.error("Brak użytkownika po autoryzacji przez Facebooka");
       return next(new Error("Nie znaleziono użytkownika po autoryzacji przez Facebooka."));
     }
     req.logIn(req.user as any, (err) => {
       if (err) {
-        console.error("Błąd przy logIn:", err);
         return next(err);
       }
       const user: any = req.user;
       const token = jwt.sign({ userId: user.id, email: user.email }, SECRET_KEY, { expiresIn: "1h" });
-      console.log("User zalogowany, przekierowywanie do profilu z tokenem:", token);
-      return res.redirect(`http://localhost:5173/profile?token=${token}`);
+      return res.redirect(`https://auth-app-bbbya0excgh6g6a9.polandcentral-01.azurewebsites.net/profile?token=${token}`);
     });
   }
 );
+
 
 
 
